@@ -1,0 +1,16 @@
+p {
+  font-size: 16px;
+}
+
+.green {
+  color: green;
+  background-color: black;
+}
+
+.fancy {
+  font-family: verdana;
+}
+
+.large {
+  font-size: 40px;
+}
