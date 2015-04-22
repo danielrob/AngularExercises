@@ -8,7 +8,8 @@
 </head>
 <body>
   <a href="#" ng-click="iamakey='iamonevalue'">OneWorld</a> | 
-  <a href="#" ng-click="iamakey='iamanothervalue'">InDualtiy</a>
+  <a href="#" ng-click="iamakey='iamanothervalue'">InDualtiy</a> | 
+  <a href="#" ng-click="iamakey='3rd'">Third Eye</a>
   <div ng-switch="iamakey">
     <div ng-switch-when="iamonevalue">
       <p>Together as one</p> 
@@ -16,6 +17,10 @@
     <div ng-switch-when="iamanothervalue">
       <p>Black and White</p>
     </div>
+    <div ng-switch-when="3rd">
+      <p>Of the three eyes only one can reveal the truth. Which One?</p>
+    </div>
+
   </div>
 </body>
 
