@@ -12,5 +12,5 @@ form {
 h5 {
   margin-top: -15px; }
 
-.bigger {
-  font-size: 16px; }
+.border-skip {
+  border-bottom: none; }

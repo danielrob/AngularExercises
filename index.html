@@ -29,20 +29,20 @@
     </form>
   </p>
   <p>
-    Same form again, with validation, but it's not required. One can submit it with an empty value. 
+    Same form again, with validation, but it's not required. One can submit it with an empty value, but not with a value of 1-39 chars. 
     <form>
       <input type="text" placeholder="cursor here, hit enter" minlength="40">
     </form>
   </p>
   <p>
-    Submitting with a submit button. 
+    Same form again, but with an explicit submit input to submit.
     <form>
       <input type="text" placeholder="just hit submit" minlength="40" required>
       <input type="submit" >
     </form>
   </p>
   <p>
-    Multiple submits use names, which would add a param to the request. 
+    Multiple submits use names, which adds an extra param to the HTTP request. 
     <form>
       <input type="text" placeholder="Multiple submits work" minlength="4000000" required>
       <input type="submit" name="submit1" >
@@ -50,7 +50,7 @@
     </form>
   </p>
   <p>
-    Typed inputs automatically validate. Enter might work on multi-inut forms in some browsers, but it's not in w3 specs. 
+    Typed inputs automatically validate. Enter might work on multi-input forms in some browsers, but it's not in w3 specs. 
     <form>
       <input type="number" placeholder="number" required><br>
       <input type="email" placeholder="e-mail format" required><br>
@@ -67,39 +67,60 @@
 <div class="example" ng-show="ngforms" ng-init="ngforms=1">
   
   <p>
-    <strong>1. &lt;form name="AngularForm"&gt;</strong> - this associates the form with an angular object which is seen below. You can change the submitted status. 
+    <strong>1. &lt;form name="AngularForm"&gt;</strong> - this associates the form with an object which is seen below. You can change the submitted status in this example. 
     <form name="AngularForm">
       <input type="text"><br>
       <pre>{{AngularForm | json }}</pre>
     </form>
   </p>
   <p>
-    <strong>2. Add &lt;input ng-model="something"&gt;</strong> - here the difference is the input has an ng-model directive. Note that you can now make pristine change. 
+    <strong>2. Add &lt;input ng-model="something"&gt;</strong> - here the difference is the input has an ng-model directive. Note that you can now make pristine change in this example. 
     <form name="AngularForm1">
       <input type="text" ng-model="m9edq"><br>
       <pre>{{AngularForm1 | json }}</pre>
     </form>
   </p>
   <p>
-    <strong>3. Add &lt; input name="john"&gt;</strong> - here the difference is the input has a name. Now the form has an john attribute. 
+    <strong>3. Add &lt; input name="myShortStory" ng-model=""&gt;</strong> - here the difference is the input has a name as well as ng-model. Now the form has a 'myShortStory' attribute. 
     <form name="AngularForm2">
-      <input type="text" name="john" ng-model="l2bi8"><br>
+      <input type="text" name="myShortStory" ng-model="l2bi8"><br>
       <pre>{{AngularForm2 | json }}</pre>
     </form>
   </p>
   <p>
-    <strong>4. Add &lt; form ng-submit="myVar='intercepted!'"&gt;</strong> - here the difference is the input has a name. Now you can access the json for AngularForm.name, which is shown below. 
+    <strong>4. Add &lt; form ng-submit="myVar='intercepted!'"&gt;</strong> - Using ng-submit will stop the browser from sending an HTTP request and evaluate the specified expression instead. 
     <form name="AngularForm3" ng-submit="myVar='intercepted!'">
         <input type="submit" value="Submit Me!">
         <p>I have been: {{myVar}}</p>
     </form>
   </p>
   <p>
-    <strong>5. Using ng-click instead</strong> The same thing can be achieved using ng-click on the first input/button with type submit in the form. Don't use both. 
+    <strong>5. You can use ng-click instead of ng-submit</strong> - The same thing can be achieved using ng-click on the first input/button with type submit in the form. 
     <form name="AngularForm4">
         <input type="submit" value="Submit Me!" ng-click="tyd8o='intercepted!'">
         <p>I have been: {{tyd8o}}</p>
     </form>
+  </p>
+  <h3>Angular Form Data</h3>
+  <p>
+    From the above, you can see that using just directives, you can fill a form object and populate the scope with either/both a form object, and/or ng-model model data. Logic on this data can be performed in the view, or if the form is wrapped in a controller, it follows you could call to functions on the controller, and have it act on form data. 
+  </p>
+  <p>
+    Without a controller, the form object can be used to customise the user experience of the form using other directives like ng-show or ng-if. <br>
+    <br>
+    &lt;div ng-show="form.$submitted"&gt;<br>
+      &nbsp;&nbsp;&lt;p&gt;Form Submitted!&lt;/p&gt;<br>
+    &lt;/div&gt;<br>
+    <br>
+    This is useful in particular for validation. For example if a field is required, and it has not yet been completed, it will have the following property: <br><br>
+    formName.fieldName.$error.required
+    <br>
+    <br>
+    - This is explored in more detail below. 
+  </p>
+  <p>Angular also includes CSS classes based on the form and field states. See the angular docs for details.</p>
+  <p>
+    Non-display logic should be placed in the controller. 
   </p>
  
 </div>
@@ -107,33 +128,36 @@
 <h3>Angular Form Validation <button ng-click="ngvalidation=!ngvalidation">Show/Hide</button> </h3>
 
 <div class="example" ng-show="ngvalidation" ng-init="ngvalidation=1">
+  <p>
+    <strong>As seen in the previous section</strong> when we use the name directive on a form, and use named form fields, we can see the form and field states using the form object. In addition we can populate the field properties with further validation properties, to give us full control over form state. First though, we want to disable HTML5 Form Validation.
+  </p>
   
   <p>
-    <strong>1a. Angular form without novalidate</strong> - (leave it empty):
+    <strong>1a. &lt;form name="aForm"&gt; </strong> - Firstly, a form like before:
     
     <form name="ngValidationForm" class="border-skip">
-      <input type="text" required placeholder="cursor here, hit enter">
+      <input type="text" required placeholder="cursor here, hit enter" maxlength="0">
       <pre>Submitted...................................: {{ngValidationForm.$submitted}}</pre>
     </form>
   </p>
   <p>
-    <strong>1b. &lt;form name="aForm" novalidate&gt;</strong> - same form with novalidate. 
+    <strong>1b. &lt;form name="aForm" novalidate&gt; </strong> - Now, same form but with novalidate.
     <form name="ngValidationForm0" novalidate>
-      <input type="text" required placeholder="cursor here, hit enter">
-      <pre>Submitted: {{ngValidationForm0.$submitted}}</pre><br>
-      Note: novalidate is used in all following exmaples.
+      <input type="text" required placeholder="cursor here, hit enter" maxlength="0">
+      <pre>Submitted: {{ngValidationForm0.$submitted}}</pre>
+      <p>So.... you can use novalidate to disable native HTML form validation. </p>
     </form>
   </p>
   <p>
     <strong>2. This renders standard forms somewhat useless</strong> 
     <div>
       <form novalidate name="novalidate">
-        Name: <input type="text" required value="imtooshort" minlength="100"/><br />
+        Name: <input type="text" required value="imtooshort" ng-minlength="12"/><br />
         E-mail: <input type="email" required value="notavalidemailaddress"/><br />
         Number: <input type="number" required value=""/><br />
         Gender: <input type="radio" value="male" />male
         <input type="radio"  value="female" />female<br />
-        <input type="submit" value="Submit"/>
+        <input type="submit" ng-click="a='b'"value="Submit"/>
         <p>Submitted: {{novalidate.$submitted}}</p>
       </form>
     </div>
